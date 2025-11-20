@@ -14,21 +14,48 @@ Globals:
     LoggingConfig:
       LogFormat: JSON
 Resources:
+  ApiGateway:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: prod
+      Auth:
+        DefaultAuthorizer: CognitoAuthorizer
+        Authorizers:
+          CognitoAuthorizer:
+            UserPoolArn: !Sub "arn:aws:cognito-idp:${AWS::Region}:${AWS::AccountId}:userpool/us-east-1_OQmaANeqr"
+            Identity:
+              Header: Authorization
+              ReAuthorizeEvery: 0
+
+  AuthorizerFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: hello_world/
+      Handler: authorizer.lambda_handler
+      Runtime: python3.11
+      MemorySize: 128
+      Timeout: 5
+      Environment:
+        Variables:
+          USER_POOL_ID: us-east-1_OQmaANeqr
+          APP_CLIENT_ID: 4niv1oogjm25ln9ummhepvdib3
+          REGION: us-east-1
+
   HelloWorldFunction:
-    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Type: AWS::Serverless::Function
     Properties:
       CodeUri: hello_world/
       Handler: app.lambda_handler
-      Runtime: python3.14
-      Architectures:
-      - x86_64
+      Runtime: python3.11
       Events:
-        HelloWorld:
-          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+        Api:
+          Type: Api
           Properties:
+            RestApiId: !Ref ApiGateway
             Path: /hello
             Method: get
-
+            Auth:
+              Authorizer: CognitoAuthorizer
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
   # Find out more about other implicit resources you can reference within SAM
