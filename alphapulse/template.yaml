@@ -39,7 +39,7 @@ Resources:
       Cors:
         AllowMethods: "'GET,POST,OPTIONS'"
         AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
-        AllowOrigin: "'*'"
+        AllowOrigin: "'*'"  # For testing - restrict to specific domains in production
 
   AuthorizerFunction:
     Type: AWS::Serverless::Function
