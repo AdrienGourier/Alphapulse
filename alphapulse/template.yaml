@@ -36,6 +36,10 @@ Resources:
     Type: AWS::Serverless::Api
     Properties:
       StageName: prod
+      Cors:
+        AllowMethods: "'GET,POST,OPTIONS'"
+        AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+        AllowOrigin: "'*'"
 
   AuthorizerFunction:
     Type: AWS::Serverless::Function
@@ -64,8 +68,6 @@ Resources:
             RestApiId: !Ref ApiGateway
             Path: /hello
             Method: get
-            Auth:
-              Authorizer: NONE
 
   PortfolioFunction:
     Type: AWS::Serverless::Function
@@ -88,16 +90,12 @@ Resources:
             RestApiId: !Ref ApiGateway
             Path: /portfolio
             Method: get
-            Auth:
-              Authorizer: NONE
         PostPortfolio:
           Type: Api
           Properties:
             RestApiId: !Ref ApiGateway
             Path: /portfolio
             Method: post
-            Auth:
-              Authorizer: NONE
 
 Outputs:
   ApiUrl:
