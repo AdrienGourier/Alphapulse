@@ -35,13 +35,6 @@ Resources:
     Type: AWS::Serverless::Api
     Properties:
       StageName: prod
-      Auth:
-        Authorizers:
-          CognitoAuthorizer:
-            UserPoolArn: !Sub "arn:aws:cognito-idp:${AWS::Region}:${AWS::AccountId}:userpool/us-east-1_OQmaANeqr"
-            Identity:
-              Header: Authorization
-              ReAuthorizeEvery: 0
 
   AuthorizerFunction:
     Type: AWS::Serverless::Function
@@ -70,6 +63,8 @@ Resources:
             RestApiId: !Ref ApiGateway
             Path: /hello
             Method: get
+            Auth:
+              Authorizer: NONE
 
   PortfolioFunction:
     Type: AWS::Serverless::Function
@@ -92,12 +87,16 @@ Resources:
             RestApiId: !Ref ApiGateway
             Path: /portfolio
             Method: get
+            Auth:
+              Authorizer: NONE
         PostPortfolio:
           Type: Api
           Properties:
             RestApiId: !Ref ApiGateway
             Path: /portfolio
             Method: post
+            Auth:
+              Authorizer: NONE
 
 Outputs:
   ApiUrl:
