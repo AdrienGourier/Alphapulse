@@ -31,6 +31,7 @@ Resources:
           KeyType: RANGE
       BillingMode: PAY_PER_REQUEST
 
+  # Note: Auth is disabled for testing purposes. Enable authentication before production deployment.
   ApiGateway:
     Type: AWS::Serverless::Api
     Properties:
