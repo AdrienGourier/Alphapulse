@@ -1,5 +1,13 @@
 import json
 
+# CORS headers - using wildcard for testing, restrict to specific domains in production
+CORS_HEADERS = {
+    "Content-Type": "application/json",
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Headers": "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
+    "Access-Control-Allow-Methods": "GET,POST,OPTIONS"
+}
+
 # import requests
 
 
@@ -35,6 +43,7 @@ def lambda_handler(event, context):
 
     return {
         "statusCode": 200,
+        "headers": CORS_HEADERS,
         "body": json.dumps({
             "message": "hello world",
             # "location": ip.text.replace("\n", "")

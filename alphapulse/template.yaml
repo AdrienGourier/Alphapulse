@@ -31,17 +31,15 @@ Resources:
           KeyType: RANGE
       BillingMode: PAY_PER_REQUEST
 
+  # Note: Auth is disabled for testing purposes. Enable authentication before production deployment.
   ApiGateway:
     Type: AWS::Serverless::Api
     Properties:
       StageName: prod
-      Auth:
-        Authorizers:
-          CognitoAuthorizer:
-            UserPoolArn: !Sub "arn:aws:cognito-idp:${AWS::Region}:${AWS::AccountId}:userpool/us-east-1_OQmaANeqr"
-            Identity:
-              Header: Authorization
-              ReAuthorizeEvery: 0
+      Cors:
+        AllowMethods: "'GET,POST,OPTIONS'"
+        AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+        AllowOrigin: "'*'"  # For testing - restrict to specific domains in production
 
   AuthorizerFunction:
     Type: AWS::Serverless::Function
